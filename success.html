@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Successful</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #e9f7ef;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  text-align: center;
+}
+
+h1 {
+  color: #28a745;
+  font-size: 48px;
+}
+
+p {
+  font-size: 20px;
+  margin: 10px 0;
+}
+
+a {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+a:hover {
+  background-color: #0056b3;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Payment Successful!</h1>
+<p id="userName"></p>
+<p id="paymentAmount"></p>
+<p id="paymentRef"></p>
+<a href="index.html">Go Back to Repayment Page</a>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
+const amount = params.get("amount");
+const ref = params.get("ref");
+
+document.getElementById("userName").innerText = "Customer: " + name;
+document.getElementById("paymentAmount").innerText = "Amount Paid: GHS " + amount;
+document.getElementById("paymentRef").innerText = "Paystack Reference: " + ref;
+</script>
+
+</body>
+</html>
