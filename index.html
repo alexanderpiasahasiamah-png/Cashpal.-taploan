@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CashPal - Repayment</title>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #4A90E2, #EAF2FF);
+}
+
+.header {
+  text-align: center;
+  color: white;
+  padding: 40px 20px;
+}
+
+.table-container {
+  width: 95%;
+  margin: 20px auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+.pay-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.pay-btn:hover {
+  background-color: #218838;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+  <h2>CashPal - Repayment Portal</h2>
+  <p>Select a user below to repay their loan</p>
+</div>
+
+<div class="table-container">
+  <table id="usersTable">
+    <tr>
+      <th>Name</th>
+      <th>Due Date</th>
+      <th>Amount (GHS)</th>
+      <th>Overdue (Days)</th>
+      <th>Action</th>
+    </tr>
+  </table>
+</div>
+
+<script>
+// ---------------- DEFINE USERS ----------------
+const users = [
+  {name: "Alex Piasa Asiamah", duedate: "2026-03-01", amount: 100, days: 5, email: "alex@example.com"},
+  {name: "John Doe", duedate: "2026-03-05", amount: 50, days: 2, email: "john@example.com"},
+  {name: "Jane Smith", duedate: "2026-03-10", amount: 75, days: 0, email: "jane@example.com"}
+];
+// ---------------------------------------------
+
+const table = document.getElementById("usersTable");
+
+users.forEach(user => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${user.name}</td>
+    <td>${user.duedate}</td>
+    <td>${user.amount}</td>
+    <td>${user.days}</td>
+    <td><button class="pay-btn" onclick="payNow('${user.name}', ${user.amount}, '${user.email}')">Repay</button></td>
+  `;
+  table.appendChild(row);
+});
+
+function payNow(name, amount, email) {
+  var handler = PaystackPop.setup({
+    key: "pk_live_286cc49774695e4f691de3d8eab1d44aa191a7ac",
+    email: email,
+    amount: amount * 100,
+    currency: "GHS",
+    ref: '' + Math.floor((Math.random() * 1000000000) + 1),
+    metadata: {
+      custom_fields: [
+        { display_name: "Customer Name", variable_name: "name", value: name }
+      ]
+    },
+    callback: function(response) {
+      window.location.href = "success.html?ref=" + response.reference + "&name=" + encodeURIComponent(name) + "&amount=" + amount;
+    },
+    onClose: function() {
+      alert("Transaction cancelled");
+    }
+  });
+  handler.openIframe();
+}
+</script>
+
+</body>
+</html>
